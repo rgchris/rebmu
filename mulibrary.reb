@@ -67,7 +67,7 @@ to-http-url-mu: function ['target [word! path! string!] /secure][
 ]
 
 caret-mu: function ['value] [
-    switch/default type?/word :value [
+    switch/default type-of/word :value [
         string! [return to-string debase value]
     ] [
         throw "caret mu needs to be thought out for non-strings, see rebmu.reb"
@@ -80,166 +80,6 @@ redefine-mu: func ['dest 'source] [
     ;-- or does it?  Look into that.
 
     set :dest get :source
-]
-
-if-greater?-mu: function [
-    value1
-    value2
-    true-branch
-] [
-    if greater? value1 value2
-        true-branch
-]
-
-if-unequal?-mu: function [
-    value1
-    value2
-    true-branch
-] [
-    if not-equal? value1 value2
-        true-branch
-]
-
-if-equal?-mu: func [
-    value1
-    value2
-    true-branch
-] [
-    if equal? value1 value2
-        true-branch
-]
-
-if-zero?-mu: func [
-    value
-    true-branch
-] [
-    if zero? value
-        true-branch
-]
-
-if-lesser?-mu: func [
-    value1
-    value2
-    true-branch
-] [
-    if lesser? value1 value2
-        true-branch
-]
-
-unless-zero?-mu: func [
-    value
-    false-branch
-] [
-    unless zero? value
-        false-branch
-]
-
-either-zero?-mu: func [
-    value
-    true-branch
-    false-branch
-] [
-    either zero? value
-        true-branch
-        false-branch
-]
-
-either-greater?-mu: func [
-    value1
-    value2
-    true-branch
-    false-branch
-] [
-    either greater? value1 value2
-        true-branch
-        false-branch
-]
-
-either-lesser?-mu: func [
-    value1
-    value2
-    true-branch
-    false-branch
-] [
-    either lesser? value1 value2
-        true-branch
-        false-branch
-]
-
-either-equal?-mu: func [
-    value1
-    value2
-    true-branch
-    false-branch
-] [
-    either equal? value1 value2
-        true-branch
-        false-branch
-]
-
-either-unequal?-mu: func [
-    value1
-    value2
-    true-branch
-    false-branch
-] [
-    either not-equal? value1 value2
-        true-branch
-        false-branch
-]
-
-while-greater?-mu: function [
-    value1
-    value2
-    body-param
-] [
-    while [greater? value1 value2]
-        body-param
-]
-
-while-lesser-or-equal?-mu: function [
-    value1
-    value2
-    body-param
-] [
-    while [lesser-or-equal? value1 value2]
-        body-param
-]
-
-while-greater-or-equal?-mu: function [
-    value1
-    value2
-    body-param
-] [
-    while [greater-or-equal? value1 value2]
-        body-param
-]
-
-while-lesser?-mu: function [
-    value1
-    value2
-    body-param
-] [
-    while [lesser? value1 value2]
-        body-param
-]
-
-while-equal?-mu: function [
-    value1
-    value2
-    body-param
-] [
-    while [equal? value1 value2 cond-param]
-        body-param
-]
-
-while-unequal?-mu: function [
-    value1
-    value2
-    body-param
-] [
-    while [not-equal? value1 value2 cond-param]
-        body-param
 ]
 
 make-matrix-mu: function [columns value rows] [
@@ -260,7 +100,7 @@ make-string-initial-mu: function [length value] [
 
 ; if a pair, then the first digit is the digit
 make-integer-mu: function [value] [
-    switch/default type?/word :value [
+    switch/default type-of/word :value [
         pair! [to-integer first value * (10 ** second value)]
         integer! [to-integer 10 ** value]
     ] [
@@ -272,68 +112,69 @@ make-integer-mu: function [value] [
 ; An "a|funct" is a function that takes a single parameter called a, you only
 ; need to supply the code block.  obvious extensions for other letters.  The
 ; "func|a" is the same for funcs
+; !!! closure is a superset of function, and should rightfully have the name
 
 function-a-mu: func [body [block!]] [
-    function [a] body
+    closure [a] body
 ]
 function-ab-mu: func [body [block!]] [
-    function [a b] body
+    closure [a b] body
 ]
 function-abc-mu: func [body [block!]] [
-    function [a b c] body
+    closure [a b c] body
 ]
 function-abcd-mu: func [body [block!]] [
-    function [a b c d] body
+    closure [a b c d] body
 ]
 
 function-z-mu: func [body [block!]] [
-    function [z] body
+    closure [z] body
 ]
 function-zy-mu: func [body [block!]] [
-    function [z y] body
+    closure [z y] body
 ]
 function-zyx-mu: func [body [block!]] [
-    function [z y x] body
+    closure [z y x] body
 ]
 function-zyxw-mu: func [body [block!]] [
-    function [z y x w] body
+    closure [z y x w] body
 ]
 
 func-a-mu: func [body [block!]] [
-    func [a] body
+    clos [a] body
 ]
 func-ab-mu: func [body [block!]] [
-    func [a b] body
+    clos [a b] body
 ]
 func-abc-mu: func [body [block!]] [
-    func [a b c] body
+    clos [a b c] body
 ]
 func-abcd-mu: func [body [block!]] [
-    func [a b c d] body
+    clos [a b c d] body
 ]
 
 func-z-mu: func [body [block!]] [
-    func [z] body
+    clos [z] body
 ]
 func-zy-mu: func [body [block!]] [
-    func [z y] body
+    clos [z y] body
 ]
 func-zyx-mu: func [body [block!]] [
-    func [z y x] body
+    clos [z y x] body
 ]
 func-zyxw-mu: func [body [block!]] [
-    func [z y x w] body
+    clos [z y x w] body
 ]
 
 does-function-mu: func [body [block!]] [
-    function [] body
+    closure [] body
 ]
 
 
 quoth-mu: function [
     'arg
 ] [
-    switch/default type?/word :arg [
+    switch/default type-of/word :arg [
         word! [
             str: to-string arg
             either 1 == length? str [
@@ -344,19 +185,6 @@ quoth-mu: function [
         ]
     ] [
         throw "Unhandled type to quoth-mu"
-    ]
-]
-
-index?-find-mu: function [
-    {Same as index? find, but returns 0 if find returns none}
-    series [series! gob! port! bitset! typeset! object! none!]
-    value [any-type!]
-] [
-    pos: find series value
-    either none? pos [
-        0
-    ] [
-        index? pos
     ]
 ]
 
@@ -402,7 +230,7 @@ readin-mu: func [
     ;-- Has to be a FUNC to set in callers environment...
     ;-- ...or could we leverage the caller's binding?
 
-    switch/default type?/word get value [
+    switch/default type-of/word get value [
         string! [prin "Input String: " set value input]
         integer! [set value to-integer ask "Input Integer: "]
         decimal! [set value to-integer ask "Input Float: "]
@@ -418,7 +246,7 @@ readin-mu: func [
 inversion-mu: function [
     value
 ] [
-    switch/default type?/word :value [
+    switch/default type-of/word :value [
         string! [empty? value]
         decimal!
         integer! [
@@ -430,7 +258,7 @@ inversion-mu: function [
 ]
 
 next-mu: function [arg] [
-    switch/default type?/word :arg [
+    switch/default type-of/word :arg [
         integer! [arg + 1]
     ] [
         next arg
@@ -438,7 +266,7 @@ next-mu: function [arg] [
 ]
 
 back-mu: function [arg] [
-    switch/default type?/word :arg [
+    switch/default type-of/word :arg [
         integer! [arg - 1]
     ] [
         back arg
@@ -475,7 +303,7 @@ swap-exchange-mu: func [
     ;-- Has to be a FUNC to set in callers environment...
     ;-- ...or could we leverage the caller's binding?
 
-    if not equal? type? a type? b [
+    if not equal? type-of a type-of b [
         throw "swap-mu must be used with common types"
     ]
     either word? a [
@@ -492,7 +320,7 @@ div-mu: function [value1 value2] [
 ]
 
 add-mu: function [value1 value2] [
-    switch/default type?/word :value1 [
+    switch/default type-of/word :value1 [
         string! [
             skip value1 value2
         ]
@@ -511,7 +339,7 @@ add-mu: function [value1 value2] [
 ]
 
 subtract-mu: function [value1 value2] [
-    switch/default type?/word :value1 [
+    switch/default type-of/word :value1 [
         block! [
             result: copy value1
             while [(not tail? value1) and (not tail? value2)] [
@@ -527,7 +355,7 @@ subtract-mu: function [value1 value2] [
 ]
 
 negate-mu: function [value] [
-    switch/default type?/word :value [
+    switch/default type-of/word :value [
         block! [
             result: copy value
             while [not tail? value] [
@@ -642,50 +470,6 @@ parse-mu: func [input [series!] rules [block! string! char! none!]] [
     parse/case input rules
 ]
 
-; -1 is a particularly useful value, yet it presents complications to mushing
-; that ON does not have.  Also frequently, choosing 1 vs -1 depends on a logic.
-; Onesigned turns true into 1 and false into -1 (compared to to-integer which
-; treats false as zero)
-onesigned-mu: function [value] [
-    either to-boolean value [1] [-1]
-]
-
 ceiling-mu: function [value] [
     to-integer round/ceiling value
-]
-
-not-mu: function [value] [
-    not true? value
-]
-
-only-first-true-mu: function [value1 value2] [
-    all [
-        true? value1
-        not true? value2
-    ]
-]
-
-only-second-true-mu: function [value1 value2] [
-    all [
-        true? value2
-        not true? value1
-    ]
-]
-
-prefix-or-mu: function [value1 value2] [
-    any [
-        true? value1
-        true? value2
-    ]
-]
-
-prefix-and-mu: function [value1 value2] [
-    all [
-        true? value1
-        true? value2
-    ]
-]
-
-prefix-xor-mu: function [value1 value2] [
-    (true? value1) xor (true? value2)
 ]
